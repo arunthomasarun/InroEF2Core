@@ -10,11 +10,15 @@ namespace SomeUI
 {
     public class Program
     {
+        private static DatabaseContext _databaseContext = new DatabaseContext();
         static void Main(string[] args)
         {
-            InsertSamurai();
-            InsertMultipleSamurais();
-            InsertMulipleDifferentObjects();
+            //InsertSamurai();
+            //InsertMultipleSamurais();
+            //InsertMulipleDifferentObjects();
+            //UpdateSimpleObject();
+            DoMultipleDBOperations();
+
             Console.ReadLine();
         }
 
@@ -25,13 +29,16 @@ namespace SomeUI
                 Name = "Arun"
             };
 
-            using (var context = new DatabaseContext())
-            {
-                //*** either of the below add methods can be used
-                //context.Add(samurai);
-                context.Samurais.Add(samurai);
-                context.SaveChanges();
-            }
+            //using (var context = new DatabaseContext())
+            //{
+            //    //*** either of the below add methods can be used
+            //    //context.Add(samurai);
+            //    context.Samurais.Add(samurai);
+            //    context.SaveChanges();
+            //}
+
+            _databaseContext.Samurais.Add(samurai);
+            _databaseContext.SaveChanges();
         }
 
         private static void InsertMultipleSamurais()
@@ -44,14 +51,15 @@ namespace SomeUI
             {
                 Name = "S2"
             };
-            using (var context = new DatabaseContext())
-            {
-                //*** either of the below add methods can be used
-                //context.Add(samurai);
-                context.Samurais.AddRange(samurai1, samurai2);
-                context.SaveChanges();
-            }
-
+            //using (var context = new DatabaseContext())
+            //{
+            //    //*** either of the below add methods can be used
+            //    //context.Add(samurai);
+            //    context.Samurais.AddRange(samurai1, samurai2);
+            //    context.SaveChanges();
+            //}
+            _databaseContext.Samurais.AddRange(samurai1, samurai2);
+            _databaseContext.SaveChanges();
 
             var samurai3 = new Samurai()
             {
@@ -64,12 +72,13 @@ namespace SomeUI
             var sam = new List<Samurai>();
             sam.Add(samurai3);
             sam.Add(samurai4);
-            using (var context = new DatabaseContext())
-            {
-                context.Samurais.AddRange(sam);
-                context.SaveChanges();
-            }
-
+            //using (var context = new DatabaseContext())
+            //{
+            //    context.Samurais.AddRange(sam);
+            //    context.SaveChanges();
+            //}
+            _databaseContext.Samurais.AddRange(sam);
+            _databaseContext.SaveChanges();
 
         }
 
@@ -87,11 +96,58 @@ namespace SomeUI
                 EndDate = DateTime.Now.AddYears(-99)
             };
 
-            using (var context = new DatabaseContext())
+            //using (var context = new DatabaseContext())
+            //{
+            //    context.AddRange(samurai, battle);
+            //    context.SaveChanges();
+            //}
+            _databaseContext.AddRange(samurai, battle);
+            _databaseContext.SaveChanges();
+        }
+
+        private static void UpdateSimpleObject()
+        {
+            var sam = _databaseContext.Samurais.FirstOrDefault(s => s.Name == "S5");
+            if (sam == null)
+                throw new Exception("Samurai not found");
+
+            sam.Name = "S55";
+
+            _databaseContext.Update(sam);
+            _databaseContext.SaveChanges();
+        }
+
+        private static void DoMultipleDBOperations()
+        {
+            var sam = _databaseContext.Samurais.FirstOrDefault(s => s.Id == 1);
+            if (sam == null)
+                throw new Exception("Samurai not found");
+
+            sam.Name += " Upd";
+
+            var samurai = new Samurai()
             {
-                context.AddRange(samurai, battle);
-                context.SaveChanges();
-            }
+                Name = "New Sam"
+            };
+
+            _databaseContext.Samurais.Add(samurai);
+            _databaseContext.SaveChanges();
+        }
+
+        private static void InsertRelatedObjects()
+        {
+            var samurai = new Samurai()
+            {
+                Name = "Arun",
+                Quotes = new List<Quote>()
+                {
+                    new Quote{ Text = "I will be back"},
+                    new Quote {Text = "It's done"}
+                }
+            };
+
+            _databaseContext.Samurais.Add(samurai);
+            _databaseContext.SaveChanges();
         }
     }
 }
