@@ -1,4 +1,5 @@
-﻿using SamuraiApp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SamuraiApp.Data;
 using SamuraiApp.Domain;
 using System;
 using System.Collections.Generic;
@@ -148,6 +149,21 @@ namespace SomeUI
 
             _databaseContext.Samurais.Add(samurai);
             _databaseContext.SaveChanges();
+        }
+
+        private static void EagerLoadObjects()
+        {
+            var AllSamuraisWithQuoues = _databaseContext.Samurais.Include(s => s.Quotes).ToList();
+
+            var SamuraiWithQuoues = _databaseContext.Samurais.Where(s => s.Id==1)
+                                            .Include(s => s.Quotes).ToList();
+        }
+
+        private static void FilteringWithRelatedData()
+        {
+            var filteredDataOnRelatedObj = _databaseContext.Samurais
+                                            .Where(s => s.Quotes.Any(q => q.Text.Contains("back"))).ToList();
+
         }
     }
 }
