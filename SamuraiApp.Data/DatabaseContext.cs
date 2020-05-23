@@ -36,7 +36,37 @@ namespace SamuraiApp.Data
             modelBuilder.Entity<SamuraiBattle>()
                 .HasKey(s => new {s.SamuraiId, s.BattleId });
 
+            modelBuilder.Entity<Samurai>().Property<DateTime>("CreatedDate");
+            modelBuilder.Entity<Samurai>().Property<DateTime>("UpdatedDate");
+
+            //Below code to add Shadow Property to all tables in DB
+            //foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+            //{
+            //    modelBuilder.Entity(entityType.Name).Property<DateTime>("CreatedDate");
+            //    modelBuilder.Entity(entityType.Name).Property<DateTime>("UpdatedDate");
+            //}
+
             base.OnModelCreating(modelBuilder);
         }
+
+
+        //Update Shadow property for entire tables
+
+        //public override int SaveChanges()
+        //{
+        //    ChangeTracker.DetectChanges();
+        //    var currDate = DateTime.Now;
+
+        //    foreach(var entry in ChangeTracker.Entries()
+        //                                .Where(c => c.State == EntityState.Added || c.State == EntityState.Modified))
+        //    {
+        //        entry.Property("UpdatedDate").CurrentValue = currDate;
+
+        //        if(entry.State == EntityState.Added)
+        //            entry.Property("CreatedDate").CurrentValue = currDate;
+        //    }
+
+        //    return base.SaveChanges();
+        //}
     }
 }

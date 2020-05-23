@@ -143,6 +143,10 @@
     <Compile Include="Migrations\20200515013152_AddedSamuraiBattleAndSecretIdentity.designer.cs">
       <DependentUpon>20200515013152_AddedSamuraiBattleAndSecretIdentity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20200523003805_AddShadowPropsToSamurai.cs" />
+    <Compile Include="Migrations\20200523003805_AddShadowPropsToSamurai.designer.cs">
+      <DependentUpon>20200523003805_AddShadowPropsToSamurai.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\DatabaseContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
